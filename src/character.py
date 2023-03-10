@@ -11,17 +11,28 @@ class Character(Sprite):
         self.window = window
         self.idle_image = pygame.transform.scale2x(pygame.image.load(os.path.join("assets","character","2 Owlet_Monster","Owlet_Monster.png")))
         self.running_images = self.load_running_images()
+        self.jumping_images = self.load_jumping_images()
         self.next_running_image_index = 0
         self.pos = Vector2(self.window.get_width() / 2, self.window.get_height() * 0.76)
         self.velocity = Vector2(0, 0)
         self.jumping = False
         self.movement_pressed = False
         self.acceleration = Vector2(0, 0.1)
+        self.enable_half_speed = False
 
     def load_running_images(self):
         spritesheet = pygame.image.load(os.path.join("assets","character","2 Owlet_Monster","Owlet_Monster_Run_6.png"))
         running_images = []
         for i in range(6):
+            image = spritesheet.subsurface(i * 32, 0, 32, 32)
+            image = pygame.transform.scale2x(image)
+            running_images.append(image)
+        return running_images
+
+    def load_jumping_images(self):
+        spritesheet = pygame.image.load(os.path.join("assets","character","2 Owlet_Monster","Owlet_Monster_Jump_8.png"))
+        running_images = []
+        for i in range(8):
             image = spritesheet.subsurface(i * 32, 0, 32, 32)
             image = pygame.transform.scale2x(image)
             running_images.append(image)
@@ -63,8 +74,19 @@ class Character(Sprite):
 
     def jump(self):
         self.velocity += self.acceleration
-        self.pos += self.velocity
-        self.idle()
+        velocity = self.velocity.copy()
+        if self.enable_half_speed:
+            velocity.y /= 2
+        self.pos += velocity
+
+        flip = False
+        if self.velocity.x < 0:
+            flip = True
+
+        if self.velocity.y < 0:
+            self.set_image(self.jumping_images[3], flip)
+        else:
+            self.set_image(self.jumping_images[5], flip)
 
     def idle(self):
         self.set_image(self.idle_image)
@@ -78,11 +100,16 @@ class Character(Sprite):
         self.set_image(image)       
         self.next_running_image_index = (self.next_running_image_index + 1) % len(self.running_images)
 
-    def set_image(self, image):
+    def set_image(self, image, mirror=False):
         self.image = image
+        if mirror:
+            self.image = pygame.transform.flip(self.image, True, False)
         self.rect = self.image.get_rect()
         self.rect.x = self.pos.x
         self.rect.y = self.pos.y
+
+    def set_half_speed(self, enable):
+        self.enable_half_speed = enable
 
     def reset_jumping(self):
         self.jumping = False

@@ -76,7 +76,10 @@ class Platforms(Group):
             sprite.update()
 
     def update_y_position(self, y_velocity):
+        killed_count = 0
         for sprite in self.sprites():
             sprite.update_y_position(y_velocity)
             if sprite.rect.top > self.window.get_height():
                 sprite.kill()
+                killed_count += 1
+        return killed_count
