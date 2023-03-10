@@ -65,6 +65,7 @@ class Game:
             else:
                 character.set_half_speed(False)
 
+
             character.update()
             platforms.update()
 

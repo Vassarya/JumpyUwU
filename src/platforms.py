@@ -37,6 +37,8 @@ class Platforms(Group):
         self.last_pos = Vector2(0, 0)
         self.initial_platforms()
 
+
+
     def initial_platforms(self):
         window_width = self.window.get_width()
         window_height = self.window.get_height()
