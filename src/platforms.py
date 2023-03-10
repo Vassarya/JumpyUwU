@@ -5,6 +5,7 @@ import pygame
 import os
 import random
 
+
 class Platform(Sprite):
     def __init__(self, window, image: Surface, pos: Vector2, *groups: Group) -> None:
         super().__init__(*groups)
@@ -20,13 +21,15 @@ class Platform(Sprite):
 
     def update_y_position(self, y_velocity):
         self.pos.y += y_velocity
-    
+
+
 class Platforms(Group):
     NUMBER_OF_PLATFORMS = 8
 
     def __init__(self, window: Surface) -> None:
         super().__init__(self)
-        self.terrain_and_props = image.load(os.path.join("assets","Fantasy Swamp Forest","Free","Terrain_and_Props.png"))
+        self.terrain_and_props = image.load(
+            os.path.join("assets", "Fantasy Swamp Forest", "Free", "Terrain_and_Props.png"))
         self.platforms_sprite_rects = [
             Rect(90, 14, 65, 16)
         ]
