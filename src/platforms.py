@@ -7,17 +7,26 @@ import random
 
 
 class Platform(Sprite):
+    VELOCITY = 0.5
+    MAX_DISTANCE = 40
+
     def __init__(self, window, image: Surface, pos: Vector2, *groups: Group) -> None:
         super().__init__(*groups)
         self.image = image
         self.rect = self.image.get_rect()
         self.window = window
         self.pos = pos
+        self.initial_pos = Vector2(pos.x, pos.y)
+        self.direction = random.choice([-1, 1])
 
     def update(self):
         self.window.blit(self.image, self.pos)
         self.rect.x = self.pos.x
         self.rect.y = self.pos.y
+
+        self.pos.x += (Platform.VELOCITY * self.direction)
+        if self.pos.x <= 0 or self.pos.x >= (self.window.get_width() - self.rect.width) or abs(self.pos.x - self.initial_pos.x) > Platform.MAX_DISTANCE:
+            self.direction *= -1
 
     def update_y_position(self, y_velocity):
         self.pos.y += y_velocity
