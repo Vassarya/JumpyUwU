@@ -78,8 +78,18 @@ class Game:
                             lowest_sprite = sprite
                     if character.rect.bottom - 10 < lowest_sprite.rect.top:
                         character.reset_jumping()
+                        
             elif len(collided_sprites) == 0 and not character.is_jumping():
                 character.set_falling()
+
+            elif len(collided_sprites) > 0:
+                lowest_sprite = collided_sprites[0]
+                for sprite in collided_sprites:
+                    if sprite.rect.bottom > lowest_sprite.rect.bottom:
+                        lowest_sprite = sprite
+                platform_velocity = lowest_sprite.get_x_velocity()
+                character.update_x_position(platform_velocity)
+                
 
             self.show_text(f"Score: {self.score: <8}", 36, (0, 0, 0), pygame.Vector2(150, 20))
 

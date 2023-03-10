@@ -127,3 +127,6 @@ class Character(Sprite):
 
     def get_velocity(self):
         return self.velocity
+
+    def update_x_position(self, velocity):
+        self.pos.x += velocity

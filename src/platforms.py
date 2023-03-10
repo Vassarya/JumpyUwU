@@ -24,12 +24,16 @@ class Platform(Sprite):
         self.rect.x = self.pos.x
         self.rect.y = self.pos.y
 
-        self.pos.x += (Platform.VELOCITY * self.direction)
+        self.pos.x += self.get_x_velocity()
         if self.pos.x <= 0 or self.pos.x >= (self.window.get_width() - self.rect.width) or abs(self.pos.x - self.initial_pos.x) > Platform.MAX_DISTANCE:
             self.direction *= -1
 
     def update_y_position(self, y_velocity):
         self.pos.y += y_velocity
+
+
+    def get_x_velocity(self):
+        return Platform.VELOCITY * self.direction
 
 
 class Platforms(Group):
